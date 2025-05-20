@@ -2,12 +2,32 @@ import streamlit as st
 import pickle
 import numpy as np
 
+# --- Add background image using CSS ---
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("https://acko-cms.ackoassets.com/how_to_sell_a_used_car_in_india_9ea7a4dc00.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .block-container {
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load trained model
 with open("car_price_model.pkl", "rb") as file:
     model = pickle.load(file)
 
 # Title
-st.title("🚗 Car Price Prediction App")
+st.title("🚗 Resale Value Car Price Predictor")
 
 # User Inputs
 year = st.number_input("Year of Manufacture", min_value=2000, max_value=2025, step=1)
@@ -38,7 +58,6 @@ brand = brand_mapping[brand]
 # Prediction
 if st.button("Predict Price 💰"):
     try:
-        # Convert all inputs to float
         input_data = np.array([[year, distance, owner, fuel, car_type, drive_manual, brand]], dtype=np.float32)
         price = model.predict(input_data)[0]
         st.success(f"Estimated Price: ₹{price:,.2f}")
